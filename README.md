@@ -6,5 +6,5 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 1) yarn install
 
-2) yarn install
+2) npx react-native start
 
