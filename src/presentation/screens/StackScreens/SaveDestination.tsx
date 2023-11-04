@@ -25,9 +25,13 @@ const SaveDestination = ({ navigation, route }: any) => {
 
 
   const datosArray = [anfitrion, city, descripcion, descripcionLong, id, imagen, precio, rango, titulo];
+
+  // console.log(`datosArray ${datosArray}`);
+  
   datosArray.push(datesStorage);
   const datosArrayJSON = JSON.stringify(datosArray);
 
+  // console.log(`datosArrayJSON ${datosArrayJSON}`);
 
   const handleDataFromModal = (datesSelected: any) => {
 
@@ -41,12 +45,22 @@ const SaveDestination = ({ navigation, route }: any) => {
     try {
       setIsLoading(true);
       const getList = await AsyncStorage.getItem('ListaDeFechas');
+      // console.log(`getList ${getList}`);
+
       if (getList) {
         const existingArray = JSON.parse(getList);
         existingArray.push(datosArrayJSON);
+        // console.log(`existingArray ${existingArray}`);
+        console.log(`la lista si exite`);
+
         const listDates = await AsyncStorage.setItem('ListaDeFechas', JSON.stringify(existingArray))
+        // console.log(`datosArrayJSON ${datosArrayJSON}`);
+        
       } else {
-        AsyncStorage.setItem('list', JSON.stringify([datosArrayJSON]));
+        const saveNew = await AsyncStorage.setItem('ListaDeFechas', JSON.stringify([datosArrayJSON]));
+        // console.log(`saveNew${saveNew}`);
+        console.log(`la lista no exite`);
+
       }
     } catch (error) {
       console.error('Error al guardar en el Local Storage', error);

@@ -13,13 +13,12 @@ const NationalParksScreen = () => {
     loadListFromLocalStorage();
   }, []);
 
-
+   console.log(list);
   const loadListFromLocalStorage = async () => {
     try {
       const getList = await AsyncStorage.getItem('ListaDeFechas');
       if (getList) {
         setList(JSON.parse(getList));
-
         
       }
     } catch (error) {
@@ -50,7 +49,7 @@ const NationalParksScreen = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: hp('20%'), }} >
+        <View style={{ paddingHorizontal:10, paddingVertical: 15, marginBottom: hp('20%'), }} >
           <View>
             {list.map((item, index) => (
 
