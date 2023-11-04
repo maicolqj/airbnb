@@ -48,12 +48,13 @@ const NationalParksScreen = () => {
         contentContainerStyle={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+        >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: hp('20%'), }} >
           <View>
             {list.map((item, index) => (
 
-              <Text key={index} style={{ color: '#000', fontSize: 12,  zIndex: 99 }}>{item}</Text>
+              <Text key={index} style={{ color: '#000', fontSize: 12,  zIndex: 99, }}>{item}</Text>
             ))}
           </View>
         </View >
@@ -70,8 +71,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    // flex: 1,
-    backgroundColor: 'pink',
+    flex: 1,
+    backgroundColor: 'translucent',
     alignItems: 'center',
     justifyContent: 'center',
   },
