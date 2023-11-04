@@ -1,7 +1,7 @@
 import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { MaterialTopTabNavigationOptions, createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ViewsAwesomeScreens from '../../screens/TopTapsScreens/ViewsAwesomeScreens';
@@ -26,14 +26,22 @@ export type RootTopTabParams = {
 const TopTab = createMaterialTopTabNavigator<RootTopTabParams>();
 
 const TopTabsRoutes = () => {
-
+    
+    
     return (
         //tabBar={props => <CustomTabBar {...props} />}
         <TopTab.Navigator
-        initialLayout={{ width: 200 }}
-        style={{zIndex:99}}
+
+        
+        
             screenOptions={({ route }) => ({
+                tabStyle: { width: 'auto' },
                 tabBarLabel: () => null,
+                tabBarStyle: {
+                    width: '200%',
+                },
+                animationEnabled: true,  
+                tabBarPressColor: 'rgba( 0, 11, 40, 0.25 )',
                 tabBarIcon: ({ color, focused }) => {
                     let iconName: string = ''
                     switch (route.name) {
@@ -61,14 +69,9 @@ const TopTabsRoutes = () => {
 
                     return <Icon name={iconName} color={color} size={25}></Icon>
                 },
-                tabBarStyle: {
-                    width: wp('200%'),
-                  },
-                  scrollEnabled: true,
-                  tabStyle: { width: 'auto' },
-                  allowFontScaling: false,
                 
             })
+
             }
 
         >
@@ -78,7 +81,7 @@ const TopTabsRoutes = () => {
             <TopTab.Screen name="CastlesScreen" component={CastlesScreen} />
             <TopTab.Screen name="HousesHeightsScreen" component={HousesHeightsScreen} />
             <TopTab.Screen name="HousesWithPoolsScreen" component={HousesWithPoolsScreen} />
-        </TopTab.Navigator>
+        </TopTab.Navigator >
     );
 }
 export default TopTabsRoutes

@@ -8,24 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CardComponent from '../../components/CardComponent';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { RootTopTabParams } from '../../navigation/TopTapsRoutes/TopTabsRoutes';
-
-
-
 const ViewsAwesomeScreens = ({navigation}: any) => {
   const [isIva, setIsIva] = useState(false);
 
-  const toggleSwitch = async (value: boolean) => {
+  
 
-    await AsyncStorage.setItem('themeSelected', '1');
-  }
   return (
     <ScrollView style={{ paddingVertical: '0.5%', marginTop: '3%' }} showsVerticalScrollIndicator={false}>
       <View style={{ paddingHorizontal: wp('6%'), paddingVertical: hp('3%'), }} >
         <View style={{ ...styles.iva }}>
           <Text style={{ ...styles.snIva }}>Mostrar total sin impuestos</Text>
-          <CustonSwitchComponent isOn={isIva} onChange={toggleSwitch} />
+          <CustonSwitchComponent isOn={!isIva} onChange={() => setIsIva(!isIva)} />
         </View>
 
 
@@ -34,7 +27,7 @@ const ViewsAwesomeScreens = ({navigation}: any) => {
           keyExtractor={(city) => city.id}
           renderItem={({ item }) => {
             return (
-             <CardComponent imagen={item.imagen} city={item.city} descripcion={item.descripcion} id={item.id} onPress={() => navigation.navigate('SaveDestination', {item})} precio={item.precio} rango={item.rango} titulo={item.titulo}/>
+             <CardComponent imagen={item.imagen} city={item.city} descripcion={item.descripcion} id={item.id} onPress={() => navigation.navigate('SaveDestination', {item})} precio={item.precio} rango={item.rango} titulo={item.titulo} iva={isIva}/>
             )
           }}
           scrollEnabled={false}

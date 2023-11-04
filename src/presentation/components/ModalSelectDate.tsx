@@ -12,18 +12,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Props {
   modalUseState: boolean,
   setModalUseState: React.Dispatch<React.SetStateAction<boolean>>
-  // hotel: CitiesInterface
+  sendDataToMainScreen: any
 }
-const ModalSelectDate = ({ setModalUseState, modalUseState }: Props) => {
+const ModalSelectDate = ({ setModalUseState, modalUseState, sendDataToMainScreen }: Props) => {
   const [selectedDates, setSelectedDates] = useState<{ [date: string]: any }>({});
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const saveButtom = async() => {
+  const saveButtom = async () => {
     setIsLoading(true);
-    await AsyncStorage.setItem('Fechas', JSON.stringify(selectedDatesArray))
-    // console.log('si guardo las fechas');
-    setIsLoading(false);
+    sendDataToMainScreen(selectedDatesArray);
     setModalUseState(false)
 
   }
@@ -40,10 +38,10 @@ const ModalSelectDate = ({ setModalUseState, modalUseState }: Props) => {
       });
     }
   };
-
   const selectedDatesArray = Object.entries(selectedDates)
     .filter(([date, { selected }]) => selected)
     .map(([date]) => date);
+
 
   return (
 

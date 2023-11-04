@@ -7,55 +7,55 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ModalSelectDate from '../../components/ModalSelectDate';
 import ViewsAwesomeScreens from '../TopTapsScreens/ViewsAwesomeScreens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CitiesInterface } from '../../../domain/GlobalInterfaces';
+import useAlert from '../../hooks/useAlert';
 
 
 
 const SaveDestination = ({ navigation, route }: any) => {
 
   const { anfitrion, city, descripcion, descripcionLong, id, imagen, precio, rango, titulo } = route.params.item;
+
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [datesStorage, setDatesStorage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [list, setList] = useState<CitiesInterface[]>([]);
+  const [datesStorage, setDatesStorage] = useState('');
+  const { showMessageAlert, messageAlert } = useAlert();
 
 
-  console.log(datesStorage);
-  
-  const [saveStorage, setSaveStorage] = useState({
-    'anfitrion': anfitrion,
-    'city': city,
-    'descripcion': descripcion,
-    'descripcionLong': descripcionLong,
-    'id': id,
-    'imagen': imagen,
-    'precio': precio,
-    'rango': rango,
-    'titulo': titulo,
-    'date': datesStorage
-  });
+  const datosArray = [anfitrion, city, descripcion, descripcionLong, id, imagen, precio, rango, titulo];
+  datosArray.push(datesStorage);
+  const datosArrayJSON = JSON.stringify(datosArray);
 
 
-  useEffect(() => {
-    getDates()
-  }, [modalVisible]);
+  const handleDataFromModal = (datesSelected: any) => {
 
-
-  const getDates = async () => {
-    const datesStorage = await AsyncStorage.getItem('Fechas');
-    const inputString = datesStorage;
-    const cleanedString = inputString?.replace(/[\[\]"]+/g, '');
-    // console.log(cleanedString);
-    if (cleanedString !== undefined) {
-      setDatesStorage(cleanedString)
-    }
-    // setDatesStorage(datesStorage)
+    setDatesStorage(datesSelected);
   }
 
-  const sendData = async () => {
-    setIsLoading(true);
-    const save = await AsyncStorage.setItem('reserva', JSON.stringify(saveStorage))
-    setIsLoading(false);
-    navigation.pop();
 
+
+  const SaveData = async () => {
+
+    try {
+      setIsLoading(true);
+      const getList = await AsyncStorage.getItem('ListaDeFechas');
+      if (getList) {
+        const existingArray = JSON.parse(getList);
+        existingArray.push(datosArrayJSON);
+        const listDates = await AsyncStorage.setItem('ListaDeFechas', JSON.stringify(existingArray))
+      } else {
+        AsyncStorage.setItem('list', JSON.stringify([datosArrayJSON]));
+      }
+    } catch (error) {
+      console.error('Error al guardar en el Local Storage', error);
+    }
+    finally {
+      setIsLoading(false);
+      showMessageAlert('dato guardado con exito');
+      navigation.pop();
+    }
   }
 
   return (
@@ -95,10 +95,12 @@ const SaveDestination = ({ navigation, route }: any) => {
 
         </View>
 
+
+        {/* SECCION PARA SELECCIONAR O EDITAR FECHA */}
         <View style={{ ...styles.containerAddDate }}>
           <View style={{ ...styles.boxAddDate }}>
             {
-              (datesStorage) ?
+              (!datesStorage) ?
                 <>
                   <Text style={{ ...styles.generalText }} >Agregar fecha de reserva</Text>
                   <TouchableOpacity style={{ padding: 5 }} onPress={() => setModalVisible(true)} >
@@ -122,26 +124,23 @@ const SaveDestination = ({ navigation, route }: any) => {
 
       </ScrollView>
 
-{
-(datesStorage) &&
-//  {/* BOTTON RESERVAR */}
-      <TouchableOpacity style={{ ...styles.buttonSave }} onPress={() => sendData()}
-      >
 
-        {
-          (isLoading)
-            ? <ActivityIndicator size={20} color={'#fff'} />
-            : <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>Guardar</Text>
-        }
-      </TouchableOpacity>
+      {
+        (datesStorage) &&
+        //  {/* BOTTON RESERVAR */}
+        <TouchableOpacity style={{ ...styles.buttonSave }} onPress={() => SaveData()}
+        >
+          {
+            (isLoading)
+              ? <ActivityIndicator size={20} color={'#fff'} />
+              : <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>Guardar</Text>
+          }
+        </TouchableOpacity>
 
-}
-     
+      }
 
-      <ModalSelectDate setModalUseState={setModalVisible} modalUseState={modalVisible} />
-
-
-
+      {/* MODAL CALENDARIO */}
+      <ModalSelectDate setModalUseState={setModalVisible} modalUseState={modalVisible} sendDataToMainScreen={handleDataFromModal} />
     </SafeAreaView>
   )
 }

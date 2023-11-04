@@ -28,7 +28,7 @@ const CustonSwitchComponent = ({ isOn, onChange }: Props) => {
    
     return (
         <Switch
-            trackColor={{ false: '#ccc', true: '#ccc' }}
+            trackColor={{ false: '#ccc', true: '#07E82F' }}
             thumbColor={(Platform.OS === 'android') ? 'gray': 'red'}
             value={isEnable}
             onValueChange={toggleSwitch}

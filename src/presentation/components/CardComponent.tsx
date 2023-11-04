@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, ImageSourcePropType, Image } from 'react-native';
-import React from 'react'
+import React, { useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -13,11 +13,22 @@ interface Props {
     city: string
     rango: string;
     precio: number;
-
+    iva: Boolean
 }
 
 
-const CardComponent = ({onPress, city, descripcion, id, imagen, precio, rango, titulo}:Props) => {
+const formatNumber = (num: number, decimals: number = 2): string => {
+    return num.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+const CardComponent = ({ onPress, city, descripcion, id, imagen, precio, rango, titulo, iva }: Props) => {
+    const impuesto: number = precio * 0.19;
+    const valorTotalsinmpuesto =( precio - impuesto );
+    let formattedNumber = formatNumber(precio);
+    const formatPriceSI = formatNumber(valorTotalsinmpuesto);
+
+
     return (
         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }} activeOpacity={0.8} onPress={onPress} >
 
@@ -30,8 +41,18 @@ const CardComponent = ({onPress, city, descripcion, id, imagen, precio, rango, t
                     <View style={{}}>
                         <Text style={{ fontSize: 15, color: 'black', fontWeight: '900', marginTop: 2 }}>{titulo}</Text>
                         <Text style={{ fontSize: 15, color: 'black', fontWeight: '400', marginTop: 2 }}>{descripcion}</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 2 }}>{city}</Text>
                         <Text style={{ fontSize: 15, color: 'black', fontWeight: '300', marginTop: 2 }}>{rango}</Text>
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold', marginTop: 2 }}>$ {precio}</Text>
+                        {
+                            (iva)
+                                ? <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold', marginTop: 2 }}>
+                                    $ {formattedNumber} COP
+                                </Text>
+                                : <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold', marginTop: 2 }}>
+                                    $ {formatPriceSI} COP
+                                </Text>
+
+                        }
                     </View>
                     <View style={{ flexDirection: 'row', }}>
                         <Icon name='star' style={{ color: '#000', fontSize: 15 }}></Icon>
@@ -53,6 +74,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: hp('41%'),
         borderRadius: 25
-      },
-   
+    },
+
 })

@@ -10,6 +10,7 @@ import TravelsScreen from '../../screens/BottomTapsScreens/TravelsScreen';
 import MessagesScreen from '../../screens/BottomTapsScreens/MessagesScreen';
 import ProfileScreen from '../../screens/BottomTapsScreens/ProfileScreen';
 import { CitiesInterface } from '../../../domain/GlobalInterfaces';
+import TopTabsRoutes from '../TopTapsRoutes/TopTabsRoutes';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 export type RootBottomTabParams = {
@@ -28,6 +29,8 @@ export const BottonTapRoutesAndroid = () => {
     return (
       // <NavigationContainer>
         <BottomTabAndroid.Navigator screenOptions={({ route }) => ({
+
+          
           tabBarIcon: ({ color, focused }) => {
             let iconName: string = ''
             switch (route.name) {
@@ -71,7 +74,7 @@ export const BottonTapRoutesAndroid = () => {
             
           }}>
   
-          <BottomTabAndroid.Screen name='ExploreScreen' component={ExploreScreen} />
+          <BottomTabAndroid.Screen name='ExploreScreen' component={TopTabsRoutes}  />
           <BottomTabAndroid.Screen name='FavoritesScreen' component={FavoritesScreen} />
           <BottomTabAndroid.Screen name='TravelsScreen' component={TravelsScreen} />
           <BottomTabAndroid.Screen name='MessagesScreen' component={MessagesScreen} />
